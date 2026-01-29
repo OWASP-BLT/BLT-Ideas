@@ -53,6 +53,13 @@ Project B can be extended with a **light C** add-on in the same 350-hour slot. L
 
 ---
 
+### Project F — Forum Revamp & Engagement Automation (standalone)
+
+**One line:** Modernize the BLT forum with structured categories, events, leaderboards, and engagement bots.
+
+**Description:** Revamps the forum’s information architecture (categories, navigation, search), improves moderation and accessibility, adds events (bug bashes, sprints) with reminders, and introduces weekly/monthly activity leaderboards. Includes a suite of engagement bots (e.g. WelcomeBot, AchievementBot, LeaderboardBot, EventReminderBot, HelperBot) with rate-limits and opt-out controls. Designed to improve contributor onboarding, visibility, and community engagement. 
+
+
 ## Differentiation (standalone options)
 
 | Project | Focus | Beneficiaries | Dependencies | Risk level |
@@ -62,6 +69,7 @@ Project B can be extended with a **light C** add-on in the same 350-hour slot. L
 | C | Education platform | New contributors | Content, mentoring | Medium (content burden) |
 | D | Knowledge sharing | OSS ecosystem | Aggregated data, governance | Medium (privacy) |
 | E | PR readiness & workflow | Contributors, maintainers | GitHub API, (optional) BLT auth | Medium (API limits, parsers) |
+| F | Forum revamp & automation | Entire community | Forum, schedulers (cron), caching | Medium (moderation load, bot noise) |
 
 ---
 
@@ -73,7 +81,11 @@ Choose by primary goal (one project per slot):
 - **CVE detection & verification pipeline** (GHSC, NVD, maintainer verification UI/API) → **Project A**
 - **PR readiness & merge workflow** (CI aggregation, discussion analysis, reviewer intent, web dashboard) → **Project E**
 - **Structured education & knowledge sharing** (labs, playbooks, dashboards, approval workflow) → **Project C + D** (combined into one 350h project)
+- **Community experience & contributor engagement** (forum, events, bots, leaderboards) → Project F
 
+**Optional combined slot:**
+
+**Project E + Project F** can be combined into one 350-hour proposal when the goal is to unify PR-readiness signals with contributor-facing community improvements (forum revamp + 2–3 bots). This combination is reasonable when scoped carefully.
 ---
 
 ## Cross-cutting notes
@@ -82,5 +94,6 @@ Choose by primary goal (one project per slot):
 - **A + B in one 350-hour slot:** Not recommended; both need focused scope, testing, and pilot time. Treat as two separate projects.
 - **C + D combined:** One 350-hour project is possible: education platform (tracks, labs, quizzes, review) plus knowledge-sharing (anonymization, dashboards, playbooks, approval workflow). Shares data and governance concerns.
 - **Project E and A:** E (PR readiness) is independent. Optionally, “PR ready” from E could later feed into A’s pipeline (e.g. only consider PRs for GHSC once readiness is READY or after manual triage), but that integration is out of scope for a single 350h slot.
+- **E + F:** Independent, but pair well for a contributor-workflow–focused proposal.
 
 ---
