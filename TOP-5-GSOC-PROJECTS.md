@@ -5,6 +5,8 @@
 - **Scope:** 350 hours of work considering heavy AI assistance
 - **Core Alignment:** True to BLT's core mission of finding and fixing bugs (UX/security/all types) in websites, repositories, projects, or apps
 
+**Note:** This document ranks the top 5 GSoC projects (#1-#5) with the highest scores across all criteria, plus one honorable mention (#6) that provides valuable gamification infrastructure for the community.
+
 ---
 
 ## 🥇 Rank #1: Idea G — NetGuardian: Distributed Autonomous Security Scanning & Validation Platform
@@ -129,50 +131,105 @@ BLT Growth tackles the quality crisis in open source security contributions. By 
 
 ---
 
-## 🎖️ Rank #4: Idea E (Extended) — AI-Assisted Security Remediation Triage Platform
+## 🎖️ Rank #4: Idea E — PR Readiness & Security Dashboard
 
 **Why This Ranks #4:**
 
 **Cybersecurity Impact (8/10):**
-- **Security-focused triage** identifies potential hardening issues in PRs
-- Analyzes diffs for: unsafe TLS config, token handling, CI/CD injection risks
-- **Advisory-only** findings reduce risk while educating contributors
-- GitHub check annotations provide immediate, contextual feedback
-- Builds on PR readiness (base Idea E) with security intelligence layer
-- Helps catch security issues before they reach production
+- **Comprehensive security visibility** across PRs with SAST, secret scanning, and dependency checks
+- Correlates security findings with PR changes for **context-aware risk assessment**
+- **Security-aware PR states** (READY, ACTION_REQUIRED, BLOCKED) prevent vulnerable code from merging
+- Maintainer dashboard highlights **risky PRs** and unresolved security warnings
+- Reduces false positives by prioritizing findings affecting changed code paths
+- Provides clear remediation hints with links and guidance
 
-**AI Assistance Optimization (8/10):**
-- Deterministic rules first, then ML assistance for prioritization
-- AI can help with: Pattern recognition, risk scoring, remediation suggestions
-- Extends existing Idea E infrastructure (CI aggregation, discussion analysis)
-- Estimated 350 hours with AI: **Feasible** building on base Idea E
-- Human-in-loop review reduces false positives
-- Challenge: Security domain requires careful validation
+**AI Assistance Optimization (9/10):**
+- AI can accelerate: Dashboard UI, comment classification, reviewer intent detection, pattern recognition
+- CI/CD aggregation and discussion threading are well-suited for AI automation
+- Security signal correlation benefits from ML-based prioritization
+- Estimated 350 hours with AI: **Highly feasible** with 16-week phased timeline
+- Human-in-loop maintained through maintainer review and override capabilities
+- Clear scope boundaries prevent feature creep
 
-**Core BLT Alignment (7/10):**
-- **Moderate alignment**: Prevents bugs/vulnerabilities before merge
-- Pre-merge security checks align with "find and fix" mission
-- Advisory nature means it guides rather than blocks
-- Focus on CI/CD and PR analysis, not direct bug discovery
-- More about preventing bugs than finding existing ones
+**Core BLT Alignment (8/10):**
+- **Strong alignment**: Prevents bugs and security issues from reaching production
+- Surfaces security risks early in the PR review process
+- Helps maintainers make faster, safer merge decisions
+- Reduces review friction by aggregating all signals in one place
+- Minor deduction: Pre-merge prevention rather than post-deployment bug discovery
+- Still core to mission: finding and fixing issues before they cause harm
 
 **Key Deliverables:**
-1. Security triage layer analyzing PR diffs and CI context
-2. Pattern detection for common security issues (TLS, tokens, injection)
-3. Explainable insights with remediation guidance
-4. GitHub check annotations and comments
-5. BLT-hosted web view for security findings
-6. Advisory-only mode with human review workflow
-7. Integration with base Idea E's CI aggregation
+1. CI/CD check-run aggregation from GitHub Actions and other tools
+2. PR discussion analysis with actionable vs non-actionable classification
+3. Reviewer intent detection (blocking, needs changes, suggestion, nitpick)
+4. Security tool result integration (SAST, secrets, dependency checks)
+5. Security finding correlation with changed files and lines
+6. Security-aware PR readiness states with blocking rules
+7. Maintainer dashboard with high-risk PR queues and filters
+8. Audit trail for PR readiness and security status changes
 
 **Impact Statement:**
-Security Remediation Triage adds preventive security intelligence to BLT's workflow. By catching potential vulnerabilities during PR review with AI assistance, it helps raise security standards across projects using BLT.
+PR Readiness & Security Dashboard gives maintainers and contributors a single, actionable view of PR health and security posture. By aggregating CI/CD, security signals, and review context, it reduces merge risks and helps teams ship secure code faster.
 
 ---
 
-## 🏆 Rank #5: Idea B — Security Contribution Gamification & Recognition (with Light C Education Bridge)
+## 🏅 Rank #5: BLT Core Website Optimization & Modularization
 
 **Why This Ranks #5:**
+
+**Cybersecurity Impact (7/10):**
+- **Reduces attack surface** by splitting monolithic website into focused, minimal components
+- Improves **security posture** through isolated deployment of core bug logging features
+- Enables faster **security patches** on individual modules without full site deployment
+- **Simplified codebase** makes security audits and vulnerability detection easier
+- Cloudflare Workers and GitHub Pages provide **built-in DDoS protection** and CDN security
+- Focuses resources on hardening BLT Core (bug submission, tracking, disclosure)
+
+**AI Assistance Optimization (9/10):**
+- AI excels at: Code modularization, dependency analysis, component extraction
+- Perfect for: Automated refactoring, build configuration, deployment pipelines
+- Can accelerate: UI component splitting, API endpoint separation, routing logic
+- Estimated 350 hours with AI: **Highly feasible** with modularization automation
+- AI-powered dead code elimination and dependency tree optimization
+- Tooling generation for multi-repo management and cross-repo updates
+
+**Core BLT Alignment (9/10):**
+- **Strong alignment**: Focuses on optimizing BLT Core (bug logging) functionality
+- Removes peripheral features that dilute the core mission
+- Makes bug submission, tracking, and remediation workflows faster and more reliable
+- Improves contributor experience through simplified, focused interface
+- Separated repos enable independent scaling of core vs. auxiliary features
+- Minor deduction: Infrastructure work, but directly serves core bug logging mission
+
+**Key Deliverables:**
+1. **BLT Core extraction:** Bug submission, tracking, disclosure, remediation (primary repo)
+2. **Modular deployments:** Separate GitHub Pages / Cloudflare Workers apps per module
+3. **Feature categorization:** Identify core vs. auxiliary features through data analysis
+4. **Shared component library:** Common UI components across separated modules
+5. **API gateway:** Unified authentication and routing layer for separated services
+6. **Migration documentation:** Step-by-step guide for moving features between repos
+7. **Performance benchmarks:** Sub-200ms response times for core bug logging flows
+8. **Deployment automation:** CI/CD pipelines for each separated module
+
+**Impact Statement:**
+BLT Core Website Optimization transforms the platform from a feature-heavy monolith into focused, security-hardened microservices. By isolating core bug logging functionality and deploying on lightweight infrastructure (Cloudflare Workers, GitHub Pages), it delivers faster performance, improved security, and easier maintenance for the features that matter most.
+
+**Architecture Vision:**
+```
+BLT Ecosystem (Separated Repos):
+├── blt-core (Cloudflare Workers)          ← Bug submission, tracking, disclosure
+├── blt-rewards (GitHub Pages)             ← BACON, badges, leaderboards
+├── blt-education (GitHub Pages)           ← Security learning tracks
+├── blt-community (GitHub Pages)           ← Forums, discussions, blog
+└── blt-api-gateway (Cloudflare Workers)   ← Unified auth & routing
+```
+
+---
+
+## 🎗️ Rank #6: Idea B — Security Contribution Gamification & Recognition (with Light C Education Bridge)
+
+**Why This Ranks #6:**
 
 **Cybersecurity Impact (7/10):**
 - **Incentivizes security contributions** through BACON tokens, badges, and reputation
@@ -220,23 +277,34 @@ Security Contribution Gamification creates a sustainable motivation layer for th
 | **#1** | **NetGuardian (G)** | 10/10 | 9/10 | 10/10 | **29/30** |
 | **#2** | **CVE Remediation (M)** | 9/10 | 10/10 | 9/10 | **28/30** |
 | **#3** | **BLT Growth (H)** | 7/10 | 9/10 | 8/10 | **24/30** |
-| **#4** | **Security Triage (E-Ext)** | 8/10 | 8/10 | 7/10 | **23/30** |
-| **#5** | **Gamification (B)** | 7/10 | 7/10 | 6/10 | **20/30** |
+| **#4** | **PR Readiness & Security (E)** | 8/10 | 9/10 | 8/10 | **25/30** |
+| **#5** | **BLT Core Website Optimization** | 7/10 | 9/10 | 9/10 | **25/30** |
+| **#6** | **Gamification (B)** | 7/10 | 7/10 | 6/10 | **20/30** |
 
 ---
 
-## Why These 5?
+## Why These Top Ideas?
 
 **What Made the Cut:**
-1. **Direct security impact** — Finding, fixing, or verifying vulnerabilities
+1. **Direct security impact** — Finding, fixing, verifying vulnerabilities, or optimizing security-critical infrastructure
 2. **AI acceleration** — Tasks that benefit significantly from AI assistance within 350 hours
 3. **Core mission alignment** — True to bug logging, discovery, and remediation
 4. **Implementable scope** — Realistic for GSoC timeframe with heavy AI assistance
 5. **Industry impact** — Meaningful contribution to cybersecurity practices
 
+**Top 5 Core Projects:**
+The top 5 ranked ideas (#1-#5) represent the most impactful GSoC projects:
+- **NetGuardian** and **CVE Remediation** directly find and fix bugs at scale
+- **BLT Growth** ensures quality contributions focused on meaningful security work
+- **PR Readiness & Security Dashboard** prevents bugs before they ship
+- **BLT Core Website Optimization** streamlines and secures the core bug logging platform
+
+These five create a comprehensive security pipeline while staying true to BLT's mission.
+
 **Notable Exclusions:**
 
-- **Idea K (Frontend Migration):** Valuable but infrastructure work, not security-focused; benefits from AI but not core bug work
+- **Idea K (Frontend Migration):** Valuable infrastructure modernization, but broader than BLT Core Website Optimization (#5) which focuses specifically on modularizing and trimming to core bug logging features
+- **Idea E (Extended):** Security Remediation Triage is now covered by updated Idea E (#4) which includes comprehensive security dashboard capabilities
 - **Idea A (CVE Detection):** Good but overlaps with Idea G; NetGuardian is more comprehensive with distributed scanning
 - **Idea F (Reputation Graph):** Complex scoring system, less direct bug impact than chosen ideas
 - **Idea I (First-Time Contributor):** Important for onboarding but peripheral to core security work
@@ -249,14 +317,25 @@ Security Contribution Gamification creates a sustainable motivation layer for th
 
 For **maximum cybersecurity industry impact** while staying true to BLT's bug logging core within a 350-hour scope with AI assistance:
 
-**Primary Recommendation:** **Idea G (NetGuardian)** — This is the flagship project. It transforms BLT into an active vulnerability discovery platform with real detection capabilities, distributed community scanning, and responsible disclosure. This IS bug logging at scale.
+**Primary Recommendation: NetGuardian (G)** — This is the flagship project. It transforms BLT into an active vulnerability discovery platform with real detection capabilities, distributed community scanning, and responsible disclosure. This IS bug logging at scale.
 
-**Strong Secondary:** **Idea M (CVE Remediation Pipeline)** — Perfect complement to discovery. Ensures the bugs that are found are actually fixed properly. AI-native design makes it highly implementable in 350 hours.
+**Strong Secondary: CVE Remediation Pipeline (M)** — Perfect complement to discovery. Ensures the bugs that are found are actually fixed properly. AI-native design makes it highly implementable in 350 hours.
 
-**Quality Focus:** **Idea H (BLT Growth)** — Addresses the AI slop and contribution quality crisis. Focuses human effort on meaningful security work through intelligent guidance.
+**Quality Focus: BLT Growth (H)** — Addresses the AI slop and contribution quality crisis. Focuses human effort on meaningful security work through intelligent guidance.
 
-These three together create a complete pipeline: **Find bugs (G)** → **Fix them properly (M)** → **Guide contributors to meaningful work (H)** — all achievable in 350-hour scopes with heavy AI assistance.
+**Security Gate: PR Readiness & Security Dashboard (E)** — Prevents vulnerable code from merging by providing comprehensive security visibility across PRs with SAST, secret scanning, and intelligent triage.
+
+**Infrastructure Focus: BLT Core Website Optimization** — Streamlines the platform by extracting and optimizing core bug logging features into focused, security-hardened microservices on Cloudflare Workers and GitHub Pages.
+
+**Complete Pipeline:**
+1. **Find bugs at scale** (NetGuardian)
+2. **Fix them properly** (CVE Remediation)
+3. **Guide contributors to quality work** (BLT Growth)
+4. **Prevent issues before merge** (PR Security Dashboard)
+5. **Optimize core platform** (Website Optimization)
+
+All five are achievable in 350-hour scopes with heavy AI assistance and deliver direct impact on BLT's core mission.
 
 ---
 
-_This ranking reflects BLT's core mission: helping the cybersecurity industry find and fix bugs effectively. The top ideas deliver the most direct impact on actual vulnerability discovery and remediation._
+_This ranking reflects BLT's core mission: helping the cybersecurity industry find and fix bugs effectively. The top 5 ideas deliver the most direct impact on actual vulnerability discovery, remediation, and platform optimization._

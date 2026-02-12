@@ -12,8 +12,8 @@ The top 5 projects are:
 1. **NetGuardian (Idea G)** — Distributed security scanning platform
 2. **CVE Remediation Pipeline (Idea M)** — AI-verified fix quality assurance
 3. **BLT Growth (Idea H)** — AI-guided contributor development
-4. **Security Triage (Idea E Extended)** — Pre-merge security analysis
-5. **Gamification & Recognition (Idea B)** — Security contribution rewards
+4. **PR Readiness & Security Dashboard (Idea E)** — Comprehensive PR security visibility
+5. **BLT Core Website Optimization** — Modularize and optimize core bug logging features
 
 ---
 
