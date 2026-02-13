@@ -4,6 +4,19 @@ A short reference of BLT brainstorming ideas for potential future development.
 
 ---
 
+## 🏆 Top 5 GSoC Project Ideas
+
+**Looking for the best GSoC projects?** Check out our curated **[Top 5 GSoC Project Ideas](TOP-5-GSOC-PROJECTS.md)** — ranked by cybersecurity impact, AI-assisted feasibility, and alignment with BLT's core bug logging mission.
+
+The top 5 projects are:
+1. **NetGuardian (Idea G)** — Distributed security scanning platform
+2. **CVE Remediation Pipeline (Idea M)** — AI-verified fix quality assurance
+3. **BLT Growth (Idea H)** — AI-guided contributor development
+4. **PR Readiness & Security Dashboard (Idea E)** — Comprehensive PR security visibility
+5. **BLT Core Website Optimization** — Modularize and optimize core bug logging features
+
+---
+
 ## Purpose
 
 Synthesizes community direction (Discussion #5495). Each standalone idea fits one 350-hour development slot. These are currently brainstorming ideas and not official project commitments yet.
