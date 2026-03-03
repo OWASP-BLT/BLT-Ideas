@@ -474,20 +474,20 @@ def generate_html(ideas, overlap_matrix):
       --radius-badge:      9999px;
     }}
     .dark {{
-      /* Dark mode */
-      --bg-base:           #0d1117;
-      --bg-subtle:         #161b22;
-      --bg-inset:          #21262d;
-      --border-default:    #30363d;
-      --border-muted:      #21262d;
-      --text-primary:      #f0f6fc;
-      --text-secondary:    #8b949e;
-      --text-muted:        #484f58;
-      --link-color:        #58a6ff;
-      --accent-num:        #58a6ff;
-      --border-component:  #374151;
-      --shadow-soft:       0 1px 3px rgba(0,0,0,.3), 0 4px 12px rgba(0,0,0,.2);
-      --shadow-lift:       0 4px 16px rgba(0,0,0,.4), 0 8px 28px rgba(0,0,0,.25);
+      /* Dark mode — Slate palette */
+      --bg-base:           #0F172A;
+      --bg-subtle:         #1E293B;
+      --bg-inset:          #253047;
+      --border-default:    #334155;
+      --border-muted:      #253047;
+      --text-primary:      #e2e8f0;
+      --text-secondary:    #94a3b8;
+      --text-muted:        #475569;
+      --link-color:        #6e9ef7;
+      --accent-num:        #E10101;
+      --border-component:  #334155;
+      --shadow-soft:       0 1px 3px rgba(0,0,0,.4), 0 4px 12px rgba(0,0,0,.3);
+      --shadow-lift:       0 4px 16px rgba(0,0,0,.5), 0 8px 28px rgba(0,0,0,.35);
     }}
 
     /* ── Globals ────────────────────────────────────────────────────────── */
@@ -527,8 +527,8 @@ def generate_html(ideas, overlap_matrix):
     }}
     /* Dark mode header overrides */
     .dark header {{
-      background: linear-gradient(135deg, #161c2c 0%, #1e2438 100%);
-      border-bottom-color: #2d3550;
+      background: linear-gradient(135deg, #0F172A 0%, #1E293B 100%);
+      border-bottom-color: #334155;
     }}
     .dark header h1 {{ color: #e2e8f0; }}
     .dark header .btn-secondary {{
@@ -716,40 +716,40 @@ def generate_html(ideas, overlap_matrix):
 
     /* \u2500\u2500 Dark-mode component overrides \u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500 */
     .dark .stat-card {{
-      background: #161c2c;
-      border-color: #2d3550;
+      background: #1E293B;
+      border-color: #334155;
     }}
     .dark .table-wrap,
     .dark .matrix-wrap > table {{
-      background: #161c2c;
-      border-color: #2d3550;
+      background: #1E293B;
+      border-color: #334155;
     }}
     .dark thead tr {{
-      background: #1e2438;
+      background: #253047;
     }}
     .dark thead th {{
-      color: #8892aa;
-      border-bottom-color: #2d3550;
-      background: #1e2438;
+      color: #94a3b8;
+      border-bottom-color: #334155;
+      background: #253047;
     }}
     .dark tbody tr:hover {{
-      background: #1e2438 !important;
+      background: #253047 !important;
     }}
     .dark tbody tr:nth-child(even) {{
-      background: #131929;
+      background: #172033;
     }}
     .dark .matrix-yes  {{ background: #0d3321; color: #3fb950; }}
-    .dark .matrix-no   {{ background: #161c2c; }}
-    .dark .matrix-self {{ background: #1e2438; }}
+    .dark .matrix-no   {{ background: #1E293B; }}
+    .dark .matrix-self {{ background: #253047; }}
     .dark .matrix-head,
-    .dark .matrix-label {{ background: #1e2438; color: #8892aa; border-color: #2d3550; }}
+    .dark .matrix-label {{ background: #253047; color: #94a3b8; border-color: #334155; }}
     .dark .toolbar input,
     .dark .toolbar select {{
-      background: #1e2438;
-      border-color: #2d3550;
+      background: #253047;
+      border-color: #334155;
       color: #e2e8f0;
     }}
-    .dark .toolbar input::placeholder {{ color: #4b5268; }}
+    .dark .toolbar input::placeholder {{ color: #475569; }}
     body {{ display: flex; flex-direction: column; min-height: 100vh; }}
 
     .layout-wrap {{
