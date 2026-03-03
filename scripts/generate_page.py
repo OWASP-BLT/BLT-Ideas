@@ -412,121 +412,464 @@ def generate_html(ideas, overlap_matrix):
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>BLT Ideas — Analysis Dashboard</title>
+
+  <!-- Inline theme init — must run before first paint to prevent flash -->
+  <script>
+    (function () {{
+      var saved = localStorage.getItem('blt-theme');
+      if (saved === 'dark' || (!saved && window.matchMedia('(prefers-color-scheme: dark)').matches)) {{
+        document.documentElement.classList.add('dark');
+      }}
+    }})();
+  </script>
+
+  <!-- Manrope typeface -->
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Manrope:wght@400;500;600;700;800&display=swap" rel="stylesheet" />
+
+  <!-- Font Awesome -->
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css" crossorigin="anonymous" referrerpolicy="no-referrer" />
+
+  <!-- Tailwind CDN + design-system config -->
+  <script src="https://cdn.tailwindcss.com"></script>
+  <script>
+    tailwind.config = {{
+      darkMode: 'class',
+      theme: {{
+        extend: {{
+          fontFamily: {{ manrope: ['Manrope', 'sans-serif'] }},
+          colors: {{
+            brand: {{ DEFAULT: '#E10101', hover: '#c40000' }},
+          }},
+        }},
+      }},
+    }};
+  </script>
+
   <style>
+    /* ── Design tokens ──────────────────────────────────────────────────── */
+    :root {{
+      --color-brand:       #E10101;
+      --color-brand-hover: #c40000;
+      /* Light mode */
+      --bg-base:           #ffffff;
+      --bg-subtle:         #f6f8fa;
+      --bg-inset:          #eaeef2;
+      --border-default:    #d0d7de;
+      --border-muted:      #e8eaed;
+      --text-primary:      #1f2328;
+      --text-secondary:    #656d76;
+      --text-muted:        #9198a1;
+      --link-color:        #0969da;
+      --accent-num:        #0550ae;
+      /* Component tokens */
+      --border-component:  #E5E5E5;
+      --shadow-soft:       0 1px 3px rgba(0,0,0,.08), 0 4px 12px rgba(0,0,0,.06);
+      --shadow-lift:       0 4px 12px rgba(0,0,0,.12), 0 8px 24px rgba(0,0,0,.08);
+      --radius-section:    1rem;
+      --radius-card:       0.75rem;
+      --radius-small:      0.5rem;
+      --radius-button:     0.375rem;
+      --radius-badge:      9999px;
+    }}
+    .dark {{
+      /* Dark mode */
+      --bg-base:           #0d1117;
+      --bg-subtle:         #161b22;
+      --bg-inset:          #21262d;
+      --border-default:    #30363d;
+      --border-muted:      #21262d;
+      --text-primary:      #f0f6fc;
+      --text-secondary:    #8b949e;
+      --text-muted:        #484f58;
+      --link-color:        #58a6ff;
+      --accent-num:        #58a6ff;
+      --border-component:  #374151;
+      --shadow-soft:       0 1px 3px rgba(0,0,0,.3), 0 4px 12px rgba(0,0,0,.2);
+      --shadow-lift:       0 4px 16px rgba(0,0,0,.4), 0 8px 28px rgba(0,0,0,.25);
+    }}
+
+    /* ── Globals ────────────────────────────────────────────────────────── */
+    html {{ scroll-behavior: smooth; }}
     *, *::before, *::after {{ box-sizing: border-box; margin: 0; padding: 0; }}
     body {{
-      font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
-      background: #0d1117;
-      color: #c9d1d9;
+      font-family: 'Manrope', -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+      -webkit-font-smoothing: antialiased;
+      -moz-osx-font-smoothing: grayscale;
+      background: var(--bg-base);
+      color: var(--text-primary);
       font-size: 14px;
       line-height: 1.5;
+      transition: background-color 0.2s ease, color 0.2s ease;
     }}
-    a {{ color: #58a6ff; text-decoration: none; }}
+    a {{ color: var(--link-color); text-decoration: none; }}
     a:hover {{ text-decoration: underline; }}
     header {{
-      background: linear-gradient(135deg, #161b22 0%, #1f2937 100%);
-      border-bottom: 1px solid #30363d;
-      padding: 24px 32px;
+      background: var(--bg-subtle);
+      border-bottom: 1px solid var(--border-default);
+      height: 4rem;
+      position: sticky;
+      top: 0;
+      z-index: 50;
+      display: flex;
+      align-items: center;
+      padding: 0 2rem;
     }}
-    header h1 {{ font-size: 24px; color: #f0f6fc; font-weight: 700; }}
-    header p {{ color: #8b949e; margin-top: 6px; font-size: 13px; }}
-    .container {{ max-width: 1400px; margin: 0 auto; padding: 24px 16px; }}
+    header h1 {{
+      font-size: clamp(1rem, 2vw, 1.35rem);
+      color: var(--text-primary);
+      font-weight: 800;
+      letter-spacing: -0.02em;
+      margin: 0;
+      line-height: 1;
+      white-space: nowrap;
+    }}
+    /* Dark mode header overrides */
+    .dark header {{
+      background: linear-gradient(135deg, #161c2c 0%, #1e2438 100%);
+      border-bottom-color: #2d3550;
+    }}
+    .dark header h1 {{ color: #e2e8f0; }}
+    .dark header .btn-secondary {{
+      color: #e6edf3;
+      border-color: rgba(240,246,252,0.2);
+    }}
+    .dark header .btn-secondary:hover {{
+      background: rgba(255,255,255,0.08);
+      border-color: rgba(240,246,252,0.45);
+    }}
+    header p {{ color: #8b949e; margin-top: 6px; font-size: 13px; font-weight: 600; }}
+    header a {{ font-weight: 600; }}
+    .container {{ max-width: 80rem; margin: 0 auto; padding-top: 2.5rem; padding-bottom: 2.5rem; }}
     .stats {{
-      display: flex; gap: 16px; flex-wrap: wrap; margin-bottom: 24px;
+      display: flex; gap: 16px; flex-wrap: wrap;
     }}
     .stat-card {{
-      background: #161b22; border: 1px solid #30363d; border-radius: 8px;
+      background: var(--bg-subtle);
+      border: 1px solid var(--border-component);
+      border-radius: var(--radius-card);
       padding: 16px 20px; flex: 1; min-width: 140px;
+      box-shadow: var(--shadow-soft);
+      transition: transform 0.18s ease, box-shadow 0.18s ease;
     }}
-    .stat-card .num {{ font-size: 28px; font-weight: 700; color: #58a6ff; }}
-    .stat-card .label {{ font-size: 12px; color: #8b949e; margin-top: 4px; }}
+    .stat-card:hover {{
+      transform: translateY(-2px);
+      box-shadow: var(--shadow-lift);
+    }}
+    .stat-card .num {{
+      font-size: clamp(1.5rem, 3vw, 2rem);
+      font-weight: 800;
+      color: #E10101;
+      letter-spacing: -0.02em;
+    }}
+    .stat-card .label {{ font-size: 12px; color: #8b949e; margin-top: 4px; font-weight: 600; }}
 
     /* Filter / search */
     .toolbar {{
       display: flex; gap: 10px; flex-wrap: wrap; margin-bottom: 16px; align-items: center;
     }}
     .toolbar input {{
-      background: #161b22; border: 1px solid #30363d; border-radius: 6px;
-      color: #c9d1d9; padding: 7px 12px; font-size: 13px; width: 260px;
+      background: var(--bg-subtle); border: 1px solid var(--border-component);
+      border-radius: var(--radius-button);
+      color: var(--text-primary); padding: 7px 12px; font-size: 13px;
+      width: 260px; min-height: 44px;
+      transition: border-color 0.15s;
     }}
-    .toolbar input:focus {{ outline: none; border-color: #58a6ff; }}
+    .toolbar input:focus {{
+      outline: none;
+      border-color: var(--color-brand);
+      box-shadow: 0 0 0 3px rgba(225,1,1,.15);
+    }}
     .toolbar select {{
-      background: #161b22; border: 1px solid #30363d; border-radius: 6px;
-      color: #c9d1d9; padding: 7px 10px; font-size: 13px;
+      background: var(--bg-subtle); border: 1px solid var(--border-component);
+      border-radius: var(--radius-button);
+      color: var(--text-primary); padding: 7px 10px; font-size: 13px;
+      min-height: 44px; cursor: pointer;
+      transition: border-color 0.15s;
     }}
-    .toolbar label {{ font-size: 13px; color: #8b949e; }}
+    .toolbar select:focus {{
+      outline: none;
+      border-color: var(--color-brand);
+      box-shadow: 0 0 0 3px rgba(225,1,1,.15);
+    }}
+    .toolbar label {{ font-size: 13px; color: #8b949e; font-weight: 600; }}
 
     /* Table */
-    .table-wrap {{ overflow-x: auto; border: 1px solid #30363d; border-radius: 8px; }}
+    .table-wrap {{
+      overflow-x: auto;
+      overflow-y: auto;
+      max-height: calc(100vh - 13rem);
+      border: 1px solid var(--border-component);
+      border-radius: var(--radius-section);
+      box-shadow: var(--shadow-soft);
+    }}
     table {{
-      width: 100%; border-collapse: collapse; background: #161b22;
+      width: 100%; border-collapse: collapse; background: var(--bg-subtle);
     }}
     thead th {{
-      background: #21262d; color: #8b949e; font-size: 12px; font-weight: 600;
+      position: sticky;
+      top: 0;
+      z-index: 2;
+      background: var(--bg-inset); color: var(--text-secondary); font-size: 12px; font-weight: 700;
       text-transform: uppercase; letter-spacing: .5px;
-      padding: 10px 12px; border-bottom: 1px solid #30363d;
+      padding: 10px 12px; border-bottom: 1px solid var(--border-component);
       cursor: pointer; user-select: none; white-space: nowrap;
     }}
-    thead th:hover {{ background: #2d333b; color: #c9d1d9; }}
-    thead th.sorted-asc::after {{ content: " ↑"; color: #58a6ff; }}
-    thead th.sorted-desc::after {{ content: " ↓"; color: #58a6ff; }}
-    tbody tr {{ border-bottom: 1px solid #21262d; transition: background .1s; }}
+    thead th:hover {{ background: var(--bg-subtle); color: var(--text-primary); }}
+    thead th.sorted-asc::after  {{ content: " ↑"; color: var(--color-brand); }}
+    thead th.sorted-desc::after {{ content: " ↓"; color: var(--color-brand); }}
+    tbody tr {{ border-bottom: 1px solid var(--border-muted); transition: background .12s; }}
     tbody tr:last-child {{ border-bottom: none; }}
-    tbody tr:hover {{ background: #1c2128; }}
+    tbody tr:hover {{ background: var(--bg-inset); }}
     td {{
       padding: 9px 12px; vertical-align: top; font-size: 13px;
     }}
-    td.oneliner {{ max-width: 280px; color: #8b949e; }}
-    .muted {{ color: #484f58; }}
+    td.oneliner {{ max-width: 280px; color: var(--text-secondary); }}
+    .muted {{ color: var(--text-muted); }}
     .badge {{
-      display: inline-block; background: #1f3a5f; color: #79c0ff;
-      border-radius: 4px; padding: 1px 6px; font-size: 11px;
+      display: inline-flex; align-items: center;
+      background: var(--bg-inset); color: var(--link-color);
+      border: 1px solid var(--border-component);
+      border-radius: var(--radius-badge);
+      padding: 2px 8px; font-size: 11px; font-weight: 600;
       margin: 1px; white-space: nowrap;
+      transition: background 0.15s;
     }}
+    .badge:hover {{ background: var(--bg-subtle); text-decoration: none; }}
 
     /* Section headings */
     h2 {{
-      font-size: 18px; font-weight: 600; color: #f0f6fc;
-      margin: 32px 0 12px; border-bottom: 1px solid #30363d; padding-bottom: 8px;
+      font-size: clamp(1rem, 2vw, 1.25rem);
+      font-weight: 800;
+      color: var(--text-primary);
+      letter-spacing: -0.01em;
+      border-bottom: 1px solid var(--border-default);
+      padding-bottom: 8px;
     }}
-    h3 {{ font-size: 15px; font-weight: 600; color: #c9d1d9; margin: 24px 0 8px; }}
+    h3 {{
+      font-size: clamp(0.9rem, 1.5vw, 1.05rem);
+      font-weight: 800;
+      color: var(--text-primary);
+      letter-spacing: -0.01em;
+    }}
 
     /* Overlap matrix */
-    .matrix-wrap {{ overflow-x: auto; margin-bottom: 24px; }}
+    .matrix-wrap {{ overflow-x: auto; }}
     .matrix-wrap table {{
-      width: auto; background: #161b22; border: 1px solid #30363d; border-radius: 8px;
+      width: auto; background: var(--bg-subtle);
+      border: 1px solid var(--border-component);
+      border-radius: var(--radius-card);
+      box-shadow: var(--shadow-soft);
     }}
     .matrix-wrap th, .matrix-wrap td {{
-      padding: 4px 6px; text-align: center; font-size: 11px; border: 1px solid #21262d;
+      padding: 4px 6px; text-align: center; font-size: 11px; border: 1px solid var(--border-muted);
     }}
-    .matrix-head {{ background: #21262d; color: #8b949e; font-weight: 600; writing-mode: vertical-rl; white-space: nowrap; }}
-    .matrix-label {{ background: #21262d; color: #8b949e; font-weight: 600; text-align: left; padding: 4px 8px; white-space: nowrap; }}
+    .matrix-head {{ background: var(--bg-inset); color: var(--text-secondary); font-weight: 700; writing-mode: vertical-rl; white-space: nowrap; }}
+    .matrix-label {{ background: var(--bg-inset); color: var(--text-secondary); font-weight: 700; text-align: left; padding: 4px 8px; white-space: nowrap; }}
     .matrix-yes {{ background: #1a4a2e; color: #3fb950; font-weight: 700; }}
-    .matrix-no {{ background: #161b22; }}
-    .matrix-self {{ background: #21262d; color: #484f58; }}
+    .matrix-no {{ background: var(--bg-subtle); }}
+    .matrix-self {{ background: var(--bg-inset); color: var(--text-muted); }}
 
     /* Top connected */
     .top-list {{ list-style: none; }}
-    .top-list li {{ padding: 6px 0; border-bottom: 1px solid #21262d; font-size: 13px; }}
+    .top-list li {{ padding: 8px 0; border-bottom: 1px solid var(--border-muted); font-size: 13px; }}
     .top-list li:last-child {{ border-bottom: none; }}
 
+    /* Footer */
     footer {{
-      text-align: center; color: #484f58; font-size: 12px;
-      padding: 32px 16px; border-top: 1px solid #21262d; margin-top: 40px;
+      text-align: center; color: var(--text-muted); font-size: 12px;
+      padding: 32px 16px; border-top: 1px solid var(--border-muted); margin-top: 40px;
+    }}
+
+    /* ── Interactive base rules ─────────────────────────────────────────── */
+    .btn-primary {{
+      display: inline-flex; align-items: center; justify-content: center; gap: 6px;
+      background: var(--color-brand); color: #fff;
+      border: none; border-radius: var(--radius-button);
+      padding: 0 16px; min-height: 44px; font-weight: 700; font-size: 13px;
+      cursor: pointer; text-decoration: none;
+      transition: background 0.15s, box-shadow 0.15s, transform 0.12s;
+      box-shadow: var(--shadow-soft);
+    }}
+    .btn-primary:hover  {{ background: var(--color-brand-hover); transform: translateY(-1px); box-shadow: var(--shadow-lift); text-decoration: none; }}
+    .btn-primary:active {{ transform: translateY(0); box-shadow: var(--shadow-soft); }}
+    .btn-primary:focus-visible {{ outline: 3px solid var(--color-brand); outline-offset: 2px; }}
+
+    .btn-secondary {{
+      display: inline-flex; align-items: center; justify-content: center; gap: 6px;
+      background: transparent; color: var(--text-primary);
+      border: 1px solid var(--border-component); border-radius: var(--radius-button);
+      padding: 0 16px; min-height: 44px; font-weight: 600; font-size: 13px;
+      cursor: pointer; text-decoration: none;
+      transition: border-color 0.15s, background 0.15s, transform 0.12s;
+    }}
+    .btn-secondary:hover  {{ border-color: var(--color-brand); background: var(--bg-subtle); transform: translateY(-1px); text-decoration: none; }}
+    .btn-secondary:active {{ transform: translateY(0); }}
+    .btn-secondary:focus-visible {{ outline: 3px solid var(--color-brand); outline-offset: 2px; }}
+
+    a:focus-visible, button:focus-visible, select:focus-visible, input:focus-visible {{
+      outline: 3px solid var(--color-brand);
+      outline-offset: 2px;
+      border-radius: var(--radius-button);
+    }}
+
+    /* \u2500\u2500 Dark-mode component overrides \u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500 */
+    .dark .stat-card {{
+      background: #161c2c;
+      border-color: #2d3550;
+    }}
+    .dark .table-wrap,
+    .dark .matrix-wrap > table {{
+      background: #161c2c;
+      border-color: #2d3550;
+    }}
+    .dark thead tr {{
+      background: #1e2438;
+    }}
+    .dark thead th {{
+      color: #8892aa;
+      border-bottom-color: #2d3550;
+      background: #1e2438;
+    }}
+    .dark tbody tr:hover {{
+      background: #1e2438 !important;
+    }}
+    .dark tbody tr:nth-child(even) {{
+      background: #131929;
+    }}
+    .dark .matrix-yes  {{ background: #0d3321; color: #3fb950; }}
+    .dark .matrix-no   {{ background: #161c2c; }}
+    .dark .matrix-self {{ background: #1e2438; }}
+    .dark .matrix-head,
+    .dark .matrix-label {{ background: #1e2438; color: #8892aa; border-color: #2d3550; }}
+    .dark .toolbar input,
+    .dark .toolbar select {{
+      background: #1e2438;
+      border-color: #2d3550;
+      color: #e2e8f0;
+    }}
+    .dark .toolbar input::placeholder {{ color: #4b5268; }}
+    body {{ display: flex; flex-direction: column; min-height: 100vh; }}
+
+    .layout-wrap {{
+      flex: 1;
+      display: grid;
+      grid-template-columns: 280px minmax(0, 1fr);
+      align-items: start;
+    }}
+
+    #sidebar {{
+      position: sticky;
+      top: 4rem;
+      height: calc(100vh - 4rem);
+      overflow-y: auto;
+      background: var(--bg-subtle);
+      border-right: 1px solid var(--border-component);
+      padding: 1.25rem 0.75rem;
+      display: flex;
+      flex-direction: column;
+      gap: 2px;
+      transition: transform 0.25s cubic-bezier(.4,0,.2,1);
+    }}
+
+    .sidebar-label {{
+      font-size: 10px;
+      font-weight: 800;
+      letter-spacing: 0.1em;
+      text-transform: uppercase;
+      color: var(--text-muted);
+      padding: 0.75rem 0.75rem 0.25rem;
+    }}
+
+    .sidebar-link {{
+      display: flex;
+      align-items: center;
+      gap: 0.6rem;
+      padding: 0 0.75rem;
+      border-radius: var(--radius-button);
+      font-size: 13px;
+      font-weight: 600;
+      color: var(--text-secondary);
+      text-decoration: none;
+      min-height: 44px;
+      transition: background 0.15s, color 0.15s;
+    }}
+    .sidebar-link:hover  {{ background: var(--bg-inset); color: var(--text-primary); text-decoration: none; }}
+    .sidebar-link.active {{ color: var(--color-brand); background: rgba(225,1,1,.08); text-decoration: none; }}
+
+    /* Overlay */
+    #sidebar-overlay {{
+      position: fixed;
+      inset: 0;
+      z-index: 35;
+      background: rgba(0,0,0,.45);
+      opacity: 0;
+      pointer-events: none;
+      transition: opacity 0.25s ease;
+    }}
+    #sidebar-overlay.visible {{ opacity: 1; pointer-events: all; }}
+
+    /* Hamburger \u2192 X */
+    .ham-line {{
+      display: block;
+      width: 20px; height: 2px;
+      background: currentColor;
+      border-radius: 2px;
+      transition: transform 0.22s ease, opacity 0.22s ease;
+      transform-origin: center;
+    }}
+    #hamburger[aria-expanded="true"] .ham-line:nth-child(1) {{ transform: translateY(6px) rotate(45deg); }}
+    #hamburger[aria-expanded="true"] .ham-line:nth-child(2) {{ opacity: 0; transform: scaleX(0); }}
+    #hamburger[aria-expanded="true"] .ham-line:nth-child(3) {{ transform: translateY(-6px) rotate(-45deg); }}
+
+    .main-content {{ min-width: 0; }}
+
+    /* Mobile: drawer */
+    @media (max-width: 1023px) {{
+      .layout-wrap {{ grid-template-columns: minmax(0, 1fr); }}
+      #sidebar {{
+        position: fixed;
+        top: 0; left: 0;
+        height: 100vh;
+        z-index: 40;
+        transform: translateX(-100%);
+        box-shadow: var(--shadow-lift);
+      }}
+      #sidebar.open {{ transform: translateX(0); }}
+      #hamburger {{ display: inline-flex !important; }}
+    }}
+    @media (min-width: 1024px) {{
+      #sidebar-overlay {{ display: none !important; }}
     }}
   </style>
 </head>
 <body>
   <header>
-    <h1>🔍 BLT Ideas — Analysis Dashboard</h1>
-    <p>
-      Auto-generated from
-      <a href="{REPO_URL}" target="_blank">OWASP-BLT/BLT-Ideas</a>
-      · {total_ideas} ideas · Sortable table · Overlap analysis · Discussion board links
-    </p>
+    <div style="display:flex; justify-content:space-between; align-items:flex-start; gap:16px;">
+      <div>
+        <h1 style="display:flex; align-items:center; gap:0.6rem; white-space:nowrap;">
+          <img src="https://raw.githubusercontent.com/OWASP-BLT/BLT/refs/heads/main/website/static/img/owasp-blt-logo.svg"
+               alt="OWASP BLT" height="22" style="display:block; flex-shrink:0;">
+          Ideas &mdash; Analysis Dashboard
+        </h1>
+        <p>
+          Auto-generated from
+          <a href="{REPO_URL}" target="_blank">OWASP-BLT/BLT-Ideas</a>
+          · {total_ideas} ideas · Sortable table · Overlap analysis · Discussion board links
+        </p>
+      </div>
+      <button id="theme-toggle" title="Toggle dark / light mode"
+        class="btn-secondary"
+        style="flex-shrink:0; font-size:15px; padding: 0 12px;">
+        <i class="fa-solid fa-moon" id="icon-moon"></i>
+        <i class="fa-solid fa-sun"  id="icon-sun"  style="display:none"></i>
+      </button>
+    </div>
   </header>
 
-  <div class="container">
+  <div class="container px-4 sm:px-6 lg:px-8">
+    <div class="space-y-10">
     <!-- Stats -->
     <div class="stats" id="stats">
       <div class="stat-card">
@@ -548,8 +891,9 @@ def generate_html(ideas, overlap_matrix):
     </div>
 
     <!-- Main sortable table -->
+    <div id="section-overview">
     <h2>📋 Ideas Overview</h2>
-    <div class="toolbar">
+    <div class="toolbar mt-3">
       <input type="text" id="search" placeholder="Search ideas…" />
       <label>Filter repo:
         <select id="filter-repo">
@@ -575,14 +919,16 @@ def generate_html(ideas, overlap_matrix):
         </tbody>
       </table>
     </div>
+    </div><!-- /overview-section -->
 
     <!-- Overlap Analysis -->
+    <div id="section-overlap">
     <h2>🔗 Idea Overlap Matrix</h2>
-    <p style="color:#8b949e; font-size:13px; margin-bottom:12px;">
+    <p style="color:var(--text-secondary); font-size:13px; margin-top:8px; margin-bottom:12px;">
       ✓ = ideas reference each other (cross-cutting dependencies / integration points).
       Click any idea ID to view its full spec.
     </p>
-    <div class="matrix-wrap">
+    <div class="matrix-wrap mt-4">
       <table>
         <thead>
           <tr>
@@ -596,17 +942,21 @@ def generate_html(ideas, overlap_matrix):
       </table>
     </div>
 
-    <h3>🏆 Most-Connected Ideas</h3>
-    <ul class="top-list">
+    <h3 class="mt-8" id="section-most-connected">🏆 Most-Connected Ideas</h3>
+    <ul class="top-list mt-3">
 {top_connected_html}
     </ul>
-  </div>
+    </div><!-- /overlap-section -->
+    </div><!-- /space-y-10 -->
+  </div><!-- /container -->
 
   <footer>
     Generated by the
     <a href="{REPO_URL}/blob/main/.github/workflows/pages.yml" target="_blank">BLT Ideas Pages workflow</a>
-    · Data sourced from GitHub API and repository commit history
+    \u00b7 Data sourced from GitHub API and repository commit history
   </footer>
+    </main><!-- /main-content -->
+  </div><!-- /layout-wrap -->
 
   <script>
   (function() {{
@@ -682,6 +1032,76 @@ def generate_html(ideas, overlap_matrix):
       }});
     }});
     document.getElementById('stat-contributors').textContent = allContribs.size;
+
+    // ── Dark-mode toggle ─────────────────────────────────────────────────
+    const themeToggle = document.getElementById('theme-toggle');
+    const iconMoon    = document.getElementById('icon-moon');
+    const iconSun     = document.getElementById('icon-sun');
+
+    function syncToggleIcon() {{
+      const dark = document.documentElement.classList.contains('dark');
+      iconMoon.style.display = dark ? '' : 'none';
+      iconSun.style.display  = dark ? 'none' : '';
+    }}
+    syncToggleIcon();
+
+    themeToggle.addEventListener('click', function () {{
+      const nowDark = document.documentElement.classList.toggle('dark');
+      localStorage.setItem('blt-theme', nowDark ? 'dark' : 'light');
+      syncToggleIcon();
+    }});
+
+    // \u2500\u2500 Mobile sidebar drawer \u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500
+    const hamburger = document.getElementById('hamburger');
+    const sidebar   = document.getElementById('sidebar');
+    const overlay   = document.getElementById('sidebar-overlay');
+
+    function openSidebar() {{
+      sidebar.classList.add('open');
+      overlay.classList.add('visible');
+      hamburger.setAttribute('aria-expanded', 'true');
+      document.body.style.overflow = 'hidden';
+    }}
+    function closeSidebar() {{
+      sidebar.classList.remove('open');
+      overlay.classList.remove('visible');
+      hamburger.setAttribute('aria-expanded', 'false');
+      document.body.style.overflow = '';
+    }}
+    hamburger.addEventListener('click', function () {{
+      sidebar.classList.contains('open') ? closeSidebar() : openSidebar();
+    }});
+    overlay.addEventListener('click', closeSidebar);
+    document.addEventListener('keydown', function (e) {{
+      if (e.key === 'Escape' && sidebar.classList.contains('open')) closeSidebar();
+    }});
+    document.querySelectorAll('.sidebar-link').forEach(function (a) {{
+      a.addEventListener('click', function () {{
+        if (window.innerWidth < 1024) closeSidebar();
+      }});
+    }});
+
+    // \u2500\u2500 Sidebar scroll-spy \u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500
+    var spySections = [
+      {{ id: 'stats',                  el: document.getElementById('stats') }},
+      {{ id: 'section-overview',       el: document.getElementById('section-overview') }},
+      {{ id: 'section-overlap',        el: document.getElementById('section-overlap') }},
+      {{ id: 'section-most-connected', el: document.getElementById('section-most-connected') }}
+    ].filter(function (s) {{ return s.el; }});
+
+    function updateActiveLink() {{
+      var scrollY = window.scrollY + 120;
+      var active  = spySections[0] ? spySections[0].id : '';
+      spySections.forEach(function (s) {{
+        if (s.el.getBoundingClientRect().top + window.scrollY <= scrollY) active = s.id;
+      }});
+      document.querySelectorAll('.sidebar-link').forEach(function (a) {{
+        a.classList.toggle('active', a.getAttribute('href') === '#' + active);
+      }});
+    }}
+    window.addEventListener('scroll', updateActiveLink, {{ passive: true }});
+    updateActiveLink();
+
   }})();
   </script>
 </body>
