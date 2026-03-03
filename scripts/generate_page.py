@@ -5,6 +5,7 @@ discussion links, repo links, and interested contributors."""
 import json
 import os
 import re
+import shutil
 import subprocess
 import sys
 from pathlib import Path
@@ -412,6 +413,7 @@ def generate_html(ideas, overlap_matrix):
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>BLT Ideas — Analysis Dashboard</title>
+  <link rel="icon" type="image/x-icon" href="favicon.ico" />
 
   <!-- Inline theme init — must run before first paint to prevent flash -->
   <script>
@@ -1156,6 +1158,12 @@ def main():
     out_file = out_dir / "index.html"
     out_file.write_text(html, encoding="utf-8")
     print(f"  Written to {out_file}")
+
+    # Copy favicon from public/ to docs/ so GitHub Pages serves it at the root
+    favicon_src = repo_root / "public" / "favicon.ico"
+    if favicon_src.exists():
+        shutil.copy2(favicon_src, out_dir / "favicon.ico")
+        print("  Copied favicon.ico to docs/")
 
     # Write a minimal _config.yml so GitHub Pages serves docs/
     config_file = repo_root / "docs" / "_config.yml"
