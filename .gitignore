@@ -1,2 +1,10 @@
 # Generated GitHub Pages output (built by CI, not committed)
 docs/
+
+# Local environment variables — never commit real tokens
+.env
+
+# Python
+__pycache__/
+*.pyc
+.venv/
