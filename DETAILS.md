@@ -12,7 +12,7 @@ Synthesizes community direction (Discussion #5495). Each standalone idea fits on
 
 ### Idea A — CVE Detection & Validation Pipeline
 
-[View full details →](Idea-A.md)
+[View full details →](Idea-A.md) | [Discussion →](https://github.com/orgs/OWASP-BLT/discussions/5703)
 
 **One line:** Opt-in pipeline from scanner/GitHub → NVD validation → GHSC model and verification UI/API.
 
@@ -20,7 +20,7 @@ Synthesizes community direction (Discussion #5495). Each standalone idea fits on
 
 ### Idea B — Security Contribution Gamification & Recognition
 
-[View full details →](Idea-B.md)
+[View full details →](Idea-B.md) | [Discussion →](https://github.com/orgs/OWASP-BLT/discussions/5704)
 
 **One line:** Consume verified security contributions to award BACON/badges, reputation tiers, leaderboards, and challenges.
 
@@ -33,7 +33,7 @@ Idea B can be extended with a **light C** add-on in the same 350-hour slot. Ligh
 
 ### Idea C — blt-education Platform (standalone)
 
-[View full details →](Idea-C.md)
+[View full details →](Idea-C.md) | [Discussion →](https://github.com/orgs/OWASP-BLT/discussions/5705)
 
 **One line:** Tiered learning tracks, hands-on labs, auto-quizzes, and instructor review workflows.
 
@@ -41,7 +41,7 @@ Idea B can be extended with a **light C** add-on in the same 350-hour slot. Ligh
 
 ### Idea D — Knowledge Sharing & Community Impact (standalone)
 
-[View full details →](Idea-D.md)
+[View full details →](Idea-D.md) | [Discussion →](https://github.com/orgs/OWASP-BLT/discussions/5706)
 
 **One line:** Anonymized aggregation, public dashboards, reports, and remediation playbooks.
 
@@ -49,7 +49,7 @@ Idea B can be extended with a **light C** add-on in the same 350-hour slot. Ligh
 
 ### Idea E — PR Readiness Tracker & Contributor Dashboard 
 
-[View full details →](Idea-E.md)
+[View full details →](Idea-E.2.md) | [Discussion →](https://github.com/orgs/OWASP-BLT/discussions/5708)
 
 **One line:** Web-based PR readiness checker with CI aggregation, discussion analysis, reviewer intent detection, and a contributor-facing dashboard.
 
@@ -59,7 +59,7 @@ Idea B can be extended with a **light C** add-on in the same 350-hour slot. Ligh
 
 ### Idea E (Extended) — AI-Assisted Security Remediation Triage Platform
 
-[View full details →](Idea-E(Extended).md)
+[View full details →](Idea-E.1.md) | [Discussion →](https://github.com/orgs/OWASP-BLT/discussions/5707)
 
 **One line:** Advisory security triage for PRs with explainable insights on security-relevant changes and remediation guidance.
 
@@ -76,7 +76,7 @@ Idea B can be extended with a **light C** add-on in the same 350-hour slot. Ligh
 
 ### Idea F — Contributor Security Reputation Graph (Quality-First Leaderboards)
 
-[View full details →](Idea-F.md)
+[View full details →](Idea-F.md) | [Discussion →](https://github.com/orgs/OWASP-BLT/discussions/5709)
 
 **One line:** Quality-driven contributor reputation and leaderboard system that ranks trust and impact instead of raw activity.
 
@@ -96,7 +96,7 @@ Idea B can be extended with a **light C** add-on in the same 350-hour slot. Ligh
 
 ### Idea H — BLT Growth: Sizzle-First Contributor Progress & AI-Guided Issue Recommendation
 
-[View full details →](Idea-H.md)
+[View full details →](Idea-H.md) | [Discussion →](https://github.com/orgs/OWASP-BLT/discussions/5711)
 
 **One line:** Time-aware contributor growth system that uses Sizzle (time tracking) to drive personal progress, AI-guided "what to work on next," and proactive mentoring on PR merge.
 
@@ -131,6 +131,7 @@ Idea B can be extended with a **light C** add-on in the same 350-hour slot. Ligh
 **Description:** Builds a BLT cybersecurity intelligence platform that transforms public CVEs, advisories, and security news into a personalized vulnerability intelligence dashboard, API, and newsletter for OWASP BLT users. Each vulnerability is presented as part of a broader security intelligence view—linking CVEs, advisories, and reported incidents to affected technology stacks, risk categories, and observed attack patterns. The platform helps users quickly understand what happened, who was impacted, and why it matters, without performing vulnerability detection, validation, or disclosure workflows.
 
 ---
+
 ### Idea N — RAG AI Bot for Intelligent Onboarding & Security Learning
 
 [View full details →](Idea-N.md)
